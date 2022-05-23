@@ -25,6 +25,12 @@ export class ProductsService {
         return await this.prisma.product.create({ data });
     }
 
+    async getProductById(id: string): Promise<ProductDTO | {}> {
+        // Get and return the product
+        const product = await this.prisma.product.findUnique({ where: { id } });
+        return product ? product : {}
+    }
+
     async delete(id: string): Promise<DeletedProductDTO> {
         
         const product = await this.prisma.product.findFirst({
