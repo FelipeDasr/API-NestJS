@@ -22,6 +22,11 @@ export class ProductsController {
         return await this.productServices.create(productData);
     }
 
+    @Get('product/:id')
+    async getProduct(@Param('id', ParseUUIDPipe) id: string){
+        return await this.productServices.getProductById(id);
+    }
+
     @Delete('delete/:id')
     async delete(@Param('id', ParseUUIDPipe) id: string){
         return await this.productServices.delete(id);
