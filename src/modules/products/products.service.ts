@@ -1,6 +1,9 @@
 import { HttpException, Injectable, } from "@nestjs/common";
 
-import { CreateProductDTO, DeletedProductDTO, ProductDTO } from "src/dtos/product.dto";
+import {
+    CreateProductDTO, DeletedProductDTO, ProductDTO
+} from "src/dtos/product.dto";
+import { GetProductQueryDTO } from "src/dtos/query.dto";
 
 import { PrismaService } from "../../database/prisma.service";
 
@@ -31,8 +34,12 @@ export class ProductsService {
         return product ? product : {}
     }
 
-    async delete(id: string): Promise<DeletedProductDTO> {
+    async getProducts(query: GetProductQueryDTO) {
         
+    }
+
+    async delete(id: string): Promise<DeletedProductDTO> {
+
         const product = await this.prisma.product.findFirst({
             where: {
                 id

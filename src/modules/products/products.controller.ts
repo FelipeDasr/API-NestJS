@@ -12,6 +12,7 @@ import {
 import { ProductsService } from './products.service';
 
 import { CreateProductDTO, ProductDTO } from 'src/dtos/product.dto';
+import { GetProductQueryDTO } from 'src/dtos/query.dto';
 
 @Controller()
 export class ProductsController {
@@ -29,7 +30,7 @@ export class ProductsController {
     }
 
     @Get('products')
-    async getProducts(@Query() query) {
+    async getProducts(@Query() query: GetProductQueryDTO) {
 
     }
 
