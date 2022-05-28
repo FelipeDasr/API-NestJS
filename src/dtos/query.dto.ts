@@ -1,17 +1,29 @@
+import { Type } from 'class-transformer';
 import {
-    IsIn, IsInt, IsOptional, IsPositive, IsString
+    IsOptional,
+    IsPositive,
+    IsString,
+    IsInt,
+    IsIn,
+    Max,
+    Min
 } from 'class-validator';
 
 export class GetProductQueryDTO {
+    @Type(() => Number)
     @IsInt()
     @IsPositive()
     @IsOptional()
-    page: 1;
+    @Min(1)
+    page = 1;
 
+    @Type(() => Number)
     @IsInt()
     @IsPositive()
     @IsOptional()
-    limit: 50
+    @Min(1)
+    @Max(100)
+    limit = 50
 
     @IsString()
     @IsOptional()
@@ -19,5 +31,5 @@ export class GetProductQueryDTO {
 
     @IsOptional()
     @IsIn(['desc', 'asc'])
-    priceOrderBy: 'desc';
+    priceOrderBy: 'asc' | 'desc';
 }
