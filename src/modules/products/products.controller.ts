@@ -31,7 +31,7 @@ export class ProductsController {
 
     @Get('products')
     async getProducts(@Query() query: GetProductQueryDTO) {
-
+        return await this.productServices.getProducts(query);
     }
 
 
