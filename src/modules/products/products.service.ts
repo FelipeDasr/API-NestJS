@@ -1,7 +1,7 @@
 import { HttpException, Injectable, } from "@nestjs/common";
 
 import {
-    CreateProductDTO, DeletedProductDTO, ProductDTO
+    CreateProductDTO, DeletedProductDTO, GetProductsDTO, ProductDTO
 } from "src/dtos/product.dto";
 import { GetProductQueryDTO } from "src/dtos/query.dto";
 
@@ -34,8 +34,28 @@ export class ProductsService {
         return product ? product : {}
     }
 
-    async getProducts(query: GetProductQueryDTO) {
-        
+    async getProducts(query: GetProductQueryDTO): Promise<GetProductsDTO> {
+        // Get and count products
+        const result = await this.prisma.$transaction([
+            // Find
+            this.prisma.product.findMany({
+                where: {
+                    name: { contains: query.name }
+                },
+                orderBy: { price: query.priceOrderBy },
+                take: query.limit,
+                skip: query.limit * (query.page - 1),
+            }),
+            // Count
+            this.prisma.product.count({
+                where: { name: { contains: query.name } }
+            })
+        ]);
+
+        return {
+            products: result[0],
+            resultsFound: result[1]
+        };
     }
 
     async delete(id: string): Promise<DeletedProductDTO> {
