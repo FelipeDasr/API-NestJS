@@ -6,12 +6,16 @@ import {
 import { GetProductQueryDTO } from "src/dtos/query.dto";
 
 import { PrismaService } from "../../database/prisma.service";
+import { PhotosService } from "../photos/photos.service";
 
 @Injectable()
 export class ProductsService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly photosService: PhotosService
+    ) { }
 
-    async create(data: CreateProductDTO): Promise<ProductDTO> {
+    async create(data: CreateProductDTO, files: Express.Multer.File[]): Promise<ProductDTO> {
         // Gets a product with the same name
         const productAlreadyExists = await this.prisma.product.findFirst({
             where: {
