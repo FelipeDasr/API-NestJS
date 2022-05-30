@@ -3,10 +3,13 @@ import {
     IsString,
     IsOptional,
     IsInt,
-    IsNumber
+    IsNumber,
+    IsPositive,
+    Min
 } from 'class-validator';
 
 import { OmitType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
 
 export class ProductDTO {
 
@@ -20,10 +23,14 @@ export class ProductDTO {
     @IsString()
     description: string | null;
 
+    @Type(() => Number)
     @IsInt()
+    @Min(0)
     available: number;
 
+    @Type(() => Number)
     @IsNumber()
+    @Min(1)
     price: number;
 }
 
