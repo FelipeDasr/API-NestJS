@@ -1,4 +1,6 @@
 import {
+    UseInterceptors,
+    UploadedFiles,
     ParseUUIDPipe,
     Controller,
     Delete,
@@ -14,14 +16,20 @@ import { ProductsService } from './products.service';
 import { CreateProductDTO, ProductDTO } from 'src/dtos/product.dto';
 import { GetProductQueryDTO } from 'src/dtos/query.dto';
 
+import { FilesInterceptor } from "@nestjs/platform-express";
+import { uploadConfig } from 'src/configs';
+
 @Controller()
 export class ProductsController {
 
     constructor(private readonly productServices: ProductsService) { }
 
     @Post('create')
-    async create(@Body() productData: CreateProductDTO): Promise<ProductDTO> {
-        return await this.productServices.create(productData);
+    @UseInterceptors(FilesInterceptor('files', 5, uploadConfig))
+    async create(@Body() productData: CreateProductDTO, @UploadedFiles() files: Express.Multer.File[]): (
+        Promise<ProductDTO>
+    ) {
+        return await this.productServices.create(productData, files);
     }
 
     @Get('product/:id')
