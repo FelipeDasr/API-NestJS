@@ -9,6 +9,7 @@ import {
 
 import { OmitType } from '@nestjs/mapped-types';
 import { Type } from 'class-transformer';
+import { PhotoDTO } from './photo.dto';
 
 export class ProductDTO {
 
@@ -42,4 +43,8 @@ export class DeletedProductDTO {
 export class GetProductsDTO {
     products: ProductDTO[];
     resultsFound: number;
+}
+
+export class CompleteProductDTO extends ProductDTO {
+    photos: PhotoDTO[]
 }
