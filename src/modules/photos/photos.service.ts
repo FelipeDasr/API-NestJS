@@ -14,6 +14,12 @@ export class PhotosService {
         this.s3 = new S3();
     }
 
+    async uploadPhotos(photos: Express.Multer.File[]): Promise<CreatePhotoDTO[]> {
+        return await Promise.all(
+            photos.map(async photo => this.uploadPhoto(photo))
+        );
+    }
+
     async uploadPhoto(photo: Express.Multer.File) {
         // Upload parameters
         const parameters = {
