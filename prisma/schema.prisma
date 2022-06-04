@@ -23,7 +23,7 @@ model Photo {
     id String @id @default(uuid())
     url String
     key String
-    product Product @relation(fields: [productId], references: [id])
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
     productId String
 
     @@map("photos")
