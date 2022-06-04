@@ -37,7 +37,7 @@ export class ProductDTO {
 export class CreateProductDTO extends OmitType(ProductDTO, ['id']) { }
 
 export class DeletedProductDTO {
-    deletedProduct: ProductDTO;
+    deletedProduct: CompleteProductDTO;
 }
 
 export class CompleteProductDTO extends ProductDTO {
