@@ -2,7 +2,7 @@ import { HttpException, Injectable, } from "@nestjs/common";
 
 import {
     CompleteProductDTO,
-    CreateProductDTO, DeletedProductDTO, GetProductsDTO, ProductDTO
+    CreateProductDTO, DeletedProductDTO, GetProductsDTO,
 } from "src/dtos/product.dto";
 import { GetProductQueryDTO } from "src/dtos/query.dto";
 
@@ -40,14 +40,19 @@ export class ProductsService {
                 photos: true
             }
         });
-        
+
         // Create the new product
         return newProduct
     }
 
-    async getProductById(id: string): Promise<ProductDTO | {}> {
+    async getProductById(id: string): Promise<CompleteProductDTO | {}> {
         // Get and return the product
-        const product = await this.prisma.product.findUnique({ where: { id } });
+        const product = await this.prisma.product.findUnique({
+            where: { id },
+            include: {
+                photos: true
+            }
+        });
         return product ? product : {}
     }
 
@@ -58,6 +63,9 @@ export class ProductsService {
             this.prisma.product.findMany({
                 where: {
                     name: { contains: query.name }
+                },
+                include: {
+                    photos: true
                 },
                 orderBy: { price: query.priceOrderBy },
                 take: query.limit,
@@ -88,7 +96,12 @@ export class ProductsService {
             throw new HttpException(`Product does not exist`, 400);
         }
 
-        const deletedProduct: ProductDTO = await this.prisma.product.delete({ where: { id } });
+        const deletedProduct: CompleteProductDTO = await this.prisma.product.delete({
+            where: { id },
+            include: {
+                photos: true
+            }
+        });
         return { deletedProduct }
     }
 }
