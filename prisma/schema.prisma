@@ -14,5 +14,17 @@ model Product {
     available Int
     price Float
 
+    photos Photo[]
+
     @@map("products")
+}
+
+model Photo {
+    id String @id @default(uuid())
+    url String
+    key String
+    product Product @relation(fields: [productId], references: [id])
+    productId String
+
+    @@map("photos")
 }
