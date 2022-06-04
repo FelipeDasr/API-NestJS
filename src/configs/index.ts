@@ -17,11 +17,6 @@ export const uploadConfig: MulterOptions = {
         fileSize: 1048576, // 1MB
         files: 5,
     },
-    storage: diskStorage({
-        filename: (req, file, cb) => {
-            return cb(null, generateFilename(file.originalname));
-        }
-    }),
     fileFilter: (req, file, cb) => {
         if (isImageFile(file.originalname)) {
             return cb(null, true);
