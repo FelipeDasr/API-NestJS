@@ -40,11 +40,11 @@ export class DeletedProductDTO {
     deletedProduct: ProductDTO;
 }
 
-export class GetProductsDTO {
-    products: ProductDTO[];
-    resultsFound: number;
-}
-
 export class CompleteProductDTO extends ProductDTO {
     photos: PhotoDTO[]
+}
+
+export class GetProductsDTO {
+    products: CompleteProductDTO[];
+    resultsFound: number;
 }
