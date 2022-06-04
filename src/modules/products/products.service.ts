@@ -1,6 +1,7 @@
 import { HttpException, Injectable, } from "@nestjs/common";
 
 import {
+    CompleteProductDTO,
     CreateProductDTO, DeletedProductDTO, GetProductsDTO, ProductDTO
 } from "src/dtos/product.dto";
 import { GetProductQueryDTO } from "src/dtos/query.dto";
@@ -15,11 +16,11 @@ export class ProductsService {
         private readonly photosService: PhotosService
     ) { }
 
-    async create(data: CreateProductDTO, files: Express.Multer.File[]): Promise<ProductDTO> {
+    async create(product: CreateProductDTO, files: Express.Multer.File[]): Promise<CompleteProductDTO> {
         // Gets a product with the same name
         const productAlreadyExists = await this.prisma.product.findFirst({
             where: {
-                name: data.name
+                name: product.name
             }
         });
 
@@ -28,8 +29,20 @@ export class ProductsService {
             throw new HttpException(`Product already exists`, 400);
         }
 
+        const newProduct = await this.prisma.product.create({
+            data: {
+                ...product,
+                photos: {
+                    create: await this.photosService.uploadPhotos(files)
+                }
+            },
+            include: {
+                photos: true
+            }
+        });
+        
         // Create the new product
-        return await this.prisma.product.create({ data });
+        return newProduct
     }
 
     async getProductById(id: string): Promise<ProductDTO | {}> {
