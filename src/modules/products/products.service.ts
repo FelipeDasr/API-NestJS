@@ -102,6 +102,10 @@ export class ProductsService {
                 photos: true
             }
         });
+
+        // Delete all product photos
+        await this.photosService.deletePhotos(deletedProduct.photos);
+        
         return { deletedProduct }
     }
 }
