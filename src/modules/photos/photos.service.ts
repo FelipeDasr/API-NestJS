@@ -3,7 +3,7 @@ import { PrismaService } from "src/database/prisma.service";
 
 import { generateFilename } from "src/utils";
 import { S3 } from "aws-sdk";
-import { CreatePhotoDTO } from "src/dtos/photo.dto";
+import { CreatePhotoDTO, PhotoDTO } from "src/dtos/photo.dto";
 
 @Injectable({})
 export class PhotosService {
@@ -18,6 +18,17 @@ export class PhotosService {
         return await Promise.all(
             photos.map(async photo => this.uploadPhoto(photo))
         );
+    }
+
+    async deletePhotos(photos: PhotoDTO[]) {
+        const parameters = {
+            Bucket: process.env.BUCKET_NAME,
+            Delete: {    // Get keys from photos object
+                Objects: photos.map(photo => ({ Key: photo.key }))
+            }
+        }
+
+        return await this.s3.deleteObjects(parameters).promise();
     }
 
     async uploadPhoto(photo: Express.Multer.File) {
