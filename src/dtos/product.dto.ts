@@ -4,7 +4,8 @@ import {
     IsOptional,
     IsInt,
     IsNumber,
-    Min
+    Min,
+    MaxLength
 } from 'class-validator';
 
 import { OmitType } from '@nestjs/mapped-types';
@@ -17,10 +18,12 @@ export class ProductDTO {
     id: string;
 
     @IsString()
+    @MaxLength(150)
     name: string;
 
     @IsOptional()
     @IsString()
+    @MaxLength(500)
     description: string | null;
 
     @Type(() => Number)
