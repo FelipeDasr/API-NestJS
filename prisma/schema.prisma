@@ -10,7 +10,7 @@ datasource db {
 model Product {
     id String @id @default(uuid())
     name String @unique @db.VarChar(150)
-    description String?
+    description String? @db.VarChar(500)
     available Int
     price Float
 
