@@ -65,7 +65,11 @@ export class ProductsService {
                     name: { contains: query.name }
                 },
                 include: {
-                    photos: true
+                    photos: {
+                        orderBy: {
+                            key: 'asc'
+                        }
+                    }
                 },
                 orderBy: { price: query.priceOrderBy },
                 take: query.limit,
